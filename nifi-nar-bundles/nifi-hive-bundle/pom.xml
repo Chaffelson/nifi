@@ -28,7 +28,8 @@
 
     <properties>
         <!-- Need to override hadoop.version here, for Hive and hadoop-client transitive dependencies -->
-        <hadoop.version>${hive.hadoop.version}</hadoop.version>
+        <hive.version>1.1.0-cdh5.10.0</hive.version>
+        <hive.hadoop.version>2.6.0-cdh5.10.0</hive.hadoop.version>    
     </properties>
 
     <modules>
@@ -48,7 +49,35 @@
                     </excludes>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <!-- Disable groovy-eclipse-compiler to exclude tests -->
+                    <execution>
+                        <id>groovy-tests</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <compilerId>javac</compilerId>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/orc/*.java</exclude>
+                        <exclude>**/*ORC.java</exclude>
+                        <exclude>**/PutHiveStreaming.java</exclude>
+                    </excludes>
+                    <testExcludes>
+                        <exclude>**/orc/*.java</exclude>
+                        <exclude>**/*ORC.java</exclude>
+                        <exclude>**/*PutHiveStreaming.java</exclude>
+                    </testExcludes>
+                </configuration>
+            </plugin>
+          </plugins>
     </build>
 
 </project>
